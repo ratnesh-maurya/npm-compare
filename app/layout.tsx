@@ -1,14 +1,10 @@
 import type { Metadata } from 'next';
-import { Space_Grotesk } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import GitHubLink from './components/GitHubLink';
 import Footer from './components/Footer';
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-space-grotesk',
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'NPM Package Comparator | Compare npm packages side by side',
@@ -43,8 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={spaceGrotesk.variable}>
-      <body className={`${spaceGrotesk.className} antialiased`}>
+    <html lang="en">
+      <body className={inter.className}>
         <GitHubLink />
         <main className="min-h-screen bg-gray-50">
           <div className="container mx-auto px-4 py-8">

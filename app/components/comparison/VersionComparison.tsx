@@ -30,6 +30,7 @@ export default function VersionComparison({ packages }: VersionComparisonProps) 
                         };
                     } catch (error) {
                         toast.error(`Failed to fetch version data for ${pkg.name}`);
+                        console.log(error);
                         return pkg;
                     }
                 })
@@ -39,6 +40,71 @@ export default function VersionComparison({ packages }: VersionComparisonProps) 
 
         fetchVersionData();
     }, [packages]);
+
+    // const options = {
+    //     responsive: true,
+    //     maintainAspectRatio: false,
+    //     plugins: {
+    //         legend: {
+    //             position: 'top' as const,
+    //             labels: {
+    //                 font: {
+    //                     size: window.innerWidth < 640 ? 10 : 12,
+    //                     family: 'Inter',
+    //                 },
+    //                 padding: window.innerWidth < 640 ? 10 : 20,
+    //             },
+    //         },
+    //         title: {
+    //             display: true,
+    //             text: 'Version History',
+    //             font: {
+    //                 size: window.innerWidth < 640 ? 14 : 16,
+    //                 family: 'Inter',
+    //                 weight: 'bold' as const,
+    //             },
+    //             padding: {
+    //                 bottom: window.innerWidth < 640 ? 10 : 20,
+    //             },
+    //         },
+    //     },
+    //     scales: {
+    //         y: {
+    //             beginAtZero: true,
+    //             title: {
+    //                 display: true,
+    //                 text: 'Version',
+    //                 font: {
+    //                     size: window.innerWidth < 640 ? 10 : 12,
+    //                     family: 'Inter',
+    //                 },
+    //             },
+    //             grid: {
+    //                 color: 'rgba(0, 0, 0, 0.05)',
+    //             },
+    //             ticks: {
+    //                 font: {
+    //                     size: window.innerWidth < 640 ? 10 : 12,
+    //                 },
+    //                 callback: function (tickValue: string | number) {
+    //                     const value = Number(tickValue);
+    //                     return value.toFixed(1);
+    //                 }
+    //             },
+    //         },
+    //         x: {
+    //             grid: {
+    //                 display: false,
+    //             },
+    //             ticks: {
+    //                 font: {
+    //                     size: window.innerWidth < 640 ? 10 : 12,
+    //                 },
+    //                 maxRotation: window.innerWidth < 640 ? 45 : 0,
+    //             },
+    //         },
+    //     },
+    // };
 
     return (
         <div className="space-y-6">

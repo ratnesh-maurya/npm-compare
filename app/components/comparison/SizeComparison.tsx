@@ -24,6 +24,15 @@ ChartJS.register(
     Legend
 );
 
+interface BundlePhobiaResponse {
+    size: number;
+    gzip: number;
+    dependencySizes: Array<{
+        name: string;
+        approximateSize: number;
+    }>;
+}
+
 interface SizeComparisonProps {
     packages: PackageData[];
 }
@@ -39,7 +48,7 @@ export default function SizeComparison({ packages }: SizeComparisonProps) {
                         const response = await fetch(
                             `https://bundlephobia.com/api/size?package=${pkg.name}@${pkg.version}`
                         );
-                        const data = await response.json();
+                        const data: BundlePhobiaResponse = await response.json();
 
                         return {
                             ...pkg,
@@ -47,12 +56,13 @@ export default function SizeComparison({ packages }: SizeComparisonProps) {
                                 gzip: data.gzip,
                                 minified: data.size,
                                 total: data.dependencySizes.reduce(
-                                    (acc: number, dep: any) => acc + dep.approximateSize,
+                                    (acc, dep) => acc + dep.approximateSize,
                                     0
                                 ),
                             },
                         };
-                    } catch (error) {
+                    } catch (err) {
+                        console.error('Error fetching size data for', pkg.name, err);
                         toast.error(`Failed to fetch size data for ${pkg.name}`);
                         return pkg;
                     }

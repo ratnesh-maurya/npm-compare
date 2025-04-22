@@ -30,6 +30,25 @@ interface DownloadsComparisonProps {
     packages: PackageData[];
 }
 
+interface DownloadData {
+    downloads: number;
+    start: string;
+    end: string;
+    package: string;
+}
+
+interface TotalDownloadData {
+    downloads: Array<{
+        downloads: number;
+        day: string;
+    }>;
+}
+
+// interface ChartValue {
+//     value: number;
+//     label: string;
+// }
+
 export default function DownloadsComparison({ packages }: DownloadsComparisonProps) {
     const [downloadData, setDownloadData] = useState<PackageData[]>([]);
 
@@ -42,20 +61,20 @@ export default function DownloadsComparison({ packages }: DownloadsComparisonPro
                         const weeklyResponse = await fetch(
                             `https://api.npmjs.org/downloads/point/last-week/${pkg.name}`
                         );
-                        const weeklyData = await weeklyResponse.json();
+                        const weeklyData: DownloadData = await weeklyResponse.json();
 
                         // Fetch monthly downloads
                         const monthlyResponse = await fetch(
                             `https://api.npmjs.org/downloads/point/last-month/${pkg.name}`
                         );
-                        const monthlyData = await monthlyResponse.json();
+                        const monthlyData: DownloadData = await monthlyResponse.json();
 
                         // Fetch total downloads
                         const totalResponse = await fetch(
                             `https://api.npmjs.org/downloads/range/2010-01-01:${new Date().toISOString().split('T')[0]}/${pkg.name}`
                         );
-                        const totalData = await totalResponse.json();
-                        const totalDownloads = totalData.downloads.reduce((acc: number, day: any) => acc + day.downloads, 0);
+                        const totalData: TotalDownloadData = await totalResponse.json();
+                        const totalDownloads = totalData.downloads.reduce((acc, day) => acc + day.downloads, 0);
 
                         console.log('Download data for', pkg.name, {
                             weekly: weeklyData.downloads,
@@ -71,8 +90,8 @@ export default function DownloadsComparison({ packages }: DownloadsComparisonPro
                                 total: totalDownloads || 0,
                             },
                         };
-                    } catch (error) {
-                        console.error('Error fetching download data for', pkg.name, error);
+                    } catch (err) {
+                        console.error('Error fetching download data for', pkg.name, err);
                         toast.error(`Failed to fetch download data for ${pkg.name}`);
                         return pkg;
                     }
@@ -159,7 +178,8 @@ export default function DownloadsComparison({ packages }: DownloadsComparisonPro
                     font: {
                         size: window.innerWidth < 640 ? 10 : 12,
                     },
-                    callback: function (value: any) {
+                    callback: function (tickValue: string | number) {
+                        const value = Number(tickValue);
                         if (window.innerWidth < 640) {
                             if (value >= 1000000) {
                                 return (value / 1000000).toFixed(1) + 'M';

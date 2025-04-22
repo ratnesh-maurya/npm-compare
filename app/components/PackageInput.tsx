@@ -9,6 +9,28 @@ interface PackageInputProps {
     onPackagesChange: (packages: PackageData[]) => void;
 }
 
+interface NpmSearchResult {
+    objects: Array<{
+        package: {
+            name: string;
+            version: string;
+            description: string;
+            repository?: {
+                url: string;
+            };
+            keywords?: string[];
+            license?: string;
+            author?: {
+                name: string;
+            };
+            maintainers?: Array<{
+                name: string;
+                email: string;
+            }>;
+        };
+    }>;
+}
+
 export default function PackageInput({ onPackagesChange }: PackageInputProps) {
     const [inputValue, setInputValue] = useState('');
     const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -21,8 +43,8 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
         try {
             setIsLoading(true);
             const response = await fetch(`https://registry.npmjs.org/-/v1/search?text=${query}&size=20&from=${(pageNum - 1) * 20}`);
-            const data = await response.json();
-            const newSuggestions = data.objects.map((pkg: any) => pkg.package.name);
+            const data: NpmSearchResult = await response.json();
+            const newSuggestions = data.objects.map((pkg) => pkg.package.name);
 
             if (pageNum === 1) {
                 setSuggestions(newSuggestions);
@@ -32,8 +54,9 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
 
             setHasMore(data.objects.length === 20);
             setPage(pageNum);
-        } catch (error) {
-            console.error('Error fetching suggestions:', error);
+        } catch (err) {
+            console.error('Error fetching suggestions:', err);
+            toast.error('Failed to fetch package suggestions');
         } finally {
             setIsLoading(false);
         }
@@ -89,7 +112,8 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
             onPackagesChange([...selectedPackages, newPackage]);
             setInputValue('');
             setSuggestions([]);
-        } catch (error) {
+        } catch (err) {
+            console.error('Error fetching package:', err);
             toast.error(`Failed to fetch package ${packageName}`);
         }
     };

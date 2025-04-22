@@ -22,7 +22,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <a
-                                    href="https://github.com/ratnesh-maurya/npm-package-comparator"
+                                    href="https://github.com/ratnesh-maurya/mpm-compare"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-gray-400 hover:text-white transition-colors"
@@ -73,7 +73,7 @@ export default function Footer() {
                                 </svg>
                             </a>
                             <a
-                                href="https://twitter.com/ratnesh_maurya"
+                                href="https://x.com/ratnesh_maurya_"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-white transition-colors"
