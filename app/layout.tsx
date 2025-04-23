@@ -20,12 +20,21 @@ export const metadata: Metadata = {
     title: 'NPM Package Comparator',
     description: 'Compare npm packages side by side. Analyze versions, dependencies, downloads, and more.',
     siteName: 'NPM Package Comparator',
+    images: [
+      {
+        url: '/social.png',
+        width: 1200,
+        height: 630,
+        alt: 'NPM Package Comparator',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'NPM Package Comparator',
     description: 'Compare npm packages side by side. Analyze versions, dependencies, downloads, and more.',
     creator: '@ratnesh_maurya',
+    images: ['/social.png'],
   },
   metadataBase: new URL('https://npm-compare.ratnesh-maurya.com/'),
   alternates: {
