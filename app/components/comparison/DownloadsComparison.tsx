@@ -14,6 +14,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { PackageData } from '../../types';
 import toast from 'react-hot-toast';
+import LoadingSpinner from '../LoadingSpinner';
 
 // Register ChartJS components
 ChartJS.register(
@@ -51,9 +52,11 @@ interface TotalDownloadData {
 
 export default function DownloadsComparison({ packages }: DownloadsComparisonProps) {
     const [downloadData, setDownloadData] = useState<PackageData[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchDownloadData = async () => {
+            setIsLoading(true);
             const updatedPackages = await Promise.all(
                 packages.map(async (pkg) => {
                     try {
@@ -98,10 +101,20 @@ export default function DownloadsComparison({ packages }: DownloadsComparisonPro
                 })
             );
             setDownloadData(updatedPackages);
+            setIsLoading(false);
         };
 
         fetchDownloadData();
     }, [packages]);
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center space-y-4 py-12">
+                <LoadingSpinner size="lg" color="blue" />
+                <p className="text-gray-600 text-sm sm:text-base font-medium">Loading download statistics...</p>
+            </div>
+        );
+    }
 
     const chartData = {
         labels: downloadData.map((pkg) => pkg.name),
@@ -209,26 +222,44 @@ export default function DownloadsComparison({ packages }: DownloadsComparisonPro
 
     return (
         <div className="space-y-6">
-            <div className="h-[300px] sm:h-[400px]">
+            <div className="h-[300px] sm:h-[400px] bg-white/50 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/20">
                 <Line data={chartData} options={options} />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {downloadData.map((pkg) => (
-                    <div key={pkg.name} className="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-                        <h3 className="font-semibold mb-2 text-sm sm:text-base text-gray-900">{pkg.name}</h3>
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-600">Weekly</span>
-                                <span className="text-sm font-medium text-gray-900">{(pkg.downloads?.weekly ?? 0).toLocaleString()}</span>
+                    <div
+                        key={pkg.name}
+                        className="group bg-white/60 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/20 hover:shadow-xl hover:bg-white/80 transition-all duration-300 hover:scale-[1.02]"
+                    >
+                        <h3 className="font-bold mb-4 text-lg text-gray-900 group-hover:text-blue-600 transition-colors duration-200">{pkg.name}</h3>
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between p-3 bg-blue-50/50 rounded-xl">
+                                <div className="flex items-center">
+                                    <svg className="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                                    </svg>
+                                    <span className="text-sm font-medium text-gray-600">Weekly</span>
+                                </div>
+                                <span className="text-sm font-bold text-blue-600">{(pkg.downloads?.weekly ?? 0).toLocaleString()}</span>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-600">Monthly</span>
-                                <span className="text-sm font-medium text-gray-900">{(pkg.downloads?.monthly ?? 0).toLocaleString()}</span>
+                            <div className="flex items-center justify-between p-3 bg-green-50/50 rounded-xl">
+                                <div className="flex items-center">
+                                    <svg className="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                    <span className="text-sm font-medium text-gray-600">Monthly</span>
+                                </div>
+                                <span className="text-sm font-bold text-green-600">{(pkg.downloads?.monthly ?? 0).toLocaleString()}</span>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-600">Total</span>
-                                <span className="text-sm font-medium text-gray-900">{(pkg.downloads?.total ?? 0).toLocaleString()}</span>
+                            <div className="flex items-center justify-between p-3 bg-purple-50/50 rounded-xl">
+                                <div className="flex items-center">
+                                    <svg className="w-4 h-4 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                    </svg>
+                                    <span className="text-sm font-medium text-gray-600">Total</span>
+                                </div>
+                                <span className="text-sm font-bold text-purple-600">{(pkg.downloads?.total ?? 0).toLocaleString()}</span>
                             </div>
                         </div>
                     </div>

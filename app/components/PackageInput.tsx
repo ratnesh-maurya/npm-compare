@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { PackageData } from '../types';
+import LoadingSpinner from './LoadingSpinner';
 
 interface PackageInputProps {
     onPackagesChange: (packages: PackageData[]) => void;
@@ -136,6 +137,11 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
                         placeholder="Search for npm packages..."
                         className="flex-1 py-2 sm:py-3 px-3 sm:px-4 focus:outline-none text-sm sm:text-base text-gray-900 placeholder-gray-500 bg-transparent"
                     />
+                    {isLoading && (
+                        <div className="pr-3">
+                            <LoadingSpinner size="sm" color="blue" />
+                        </div>
+                    )}
                 </div>
                 {suggestions.length > 0 && (
                     <ul
@@ -152,8 +158,9 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
                             </li>
                         ))}
                         {isLoading && (
-                            <li className="px-3 sm:px-4 py-2 sm:py-3 text-center text-sm sm:text-base text-gray-500">
-                                Loading more packages...
+                            <li className="px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-center text-sm sm:text-base text-gray-500">
+                                <LoadingSpinner size="sm" color="gray" />
+                                <span className="ml-2">Loading more packages...</span>
                             </li>
                         )}
                     </ul>

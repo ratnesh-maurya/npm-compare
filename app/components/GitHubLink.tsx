@@ -3,7 +3,7 @@ import Link from 'next/link';
 export default function GitHubLink() {
     return (
         <Link
-            href="https://github.com/ratnesh-maurya/mpm-compare"
+            href="https://github.com/ratnesh-maurya/npm-compare"
             target="_blank"
             rel="noopener noreferrer"
             className="fixed top-4 right-4 z-50"

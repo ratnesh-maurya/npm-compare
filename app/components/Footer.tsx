@@ -22,7 +22,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <a
-                                    href="https://github.com/ratnesh-maurya/mpm-compare"
+                                    href="https://github.com/ratnesh-maurya/npm-compare"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-gray-400 hover:text-white transition-colors"
