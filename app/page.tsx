@@ -32,7 +32,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="relative animate-fade-in-up [animation-delay:800ms]">
+          <div className="relative z-10 animate-fade-in-up [animation-delay:800ms]">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition duration-1000 animate-pulse-slow"></div>
             <div className="relative">
               <PackageInput onPackagesChange={setPackages} />
@@ -40,7 +40,7 @@ export default function Home() {
           </div>
 
           {packages.length === 0 ? (
-            <div className="mt-12 sm:mt-16 text-center animate-fade-in-up [animation-delay:1000ms]">
+            <div className="mt-12 sm:mt-16 text-center animate-fade-in-up [animation-delay:1000ms] relative z-0">
               <div className="inline-block p-8 sm:p-10 rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group">
                 <div className="relative mb-6">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-500"></div>
