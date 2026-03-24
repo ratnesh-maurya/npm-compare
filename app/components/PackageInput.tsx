@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { PackageData } from '../types';
 import LoadingSpinner from './LoadingSpinner';
@@ -126,41 +126,41 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
     };
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-6">
             <div className="relative">
-                <div className="flex items-center border-2 border-gray-200 rounded-xl shadow-sm bg-white">
-                    <MagnifyingGlassIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 ml-3" />
+                <div className="flex items-center border-4 border-black shadow-[4px_4px_0_0_#000] bg-white transition-all focus-within:translate-x-[2px] focus-within:translate-y-[2px] focus-within:shadow-[2px_2px_0_0_#000]">
+                    <MagnifyingGlassIcon className="h-5 w-5 sm:h-6 sm:w-6 text-black ml-4 font-bold" />
                     <input
                         type="text"
                         value={inputValue}
                         onChange={handleInputChange}
                         placeholder="Search for npm packages..."
-                        className="flex-1 py-2 sm:py-3 px-3 sm:px-4 focus:outline-none text-sm sm:text-base text-gray-900 placeholder-gray-500 bg-transparent"
+                        className="flex-1 py-3 sm:py-4 px-3 sm:px-4 focus:outline-none text-base sm:text-lg font-bold text-black placeholder-gray-500 bg-transparent uppercase"
                     />
                     {isLoading && (
-                        <div className="pr-3">
-                            <LoadingSpinner size="sm" color="blue" />
+                        <div className="pr-4">
+                            <LoadingSpinner size="sm" color="black" />
                         </div>
                     )}
                 </div>
                 {suggestions.length > 0 && (
                     <ul
-                        className="absolute z-10 w-full mt-1 bg-white border-2 border-gray-200 rounded-xl shadow-lg max-h-96 overflow-y-auto"
+                        className="absolute z-10 w-full mt-2 bg-white border-4 border-black shadow-[4px_4px_0_0_#000] max-h-96 overflow-y-auto"
                         onScroll={handleScroll}
                     >
                         {suggestions.map((suggestion) => (
                             <li
                                 key={suggestion}
-                                className="px-3 sm:px-4 py-2 sm:py-3 hover:bg-gray-50 cursor-pointer text-sm sm:text-base text-gray-900 border-b border-gray-100 last:border-b-0 transition-colors duration-200"
+                                className="px-4 py-3 hover:bg-yellow-200 cursor-pointer text-base font-bold text-black border-b-4 border-black last:border-b-0 uppercase transition-colors"
                                 onClick={() => handlePackageSelect(suggestion)}
                             >
                                 {suggestion}
                             </li>
                         ))}
                         {isLoading && (
-                            <li className="px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-center text-sm sm:text-base text-gray-500">
-                                <LoadingSpinner size="sm" color="gray" />
-                                <span className="ml-2">Loading more packages...</span>
+                            <li className="px-4 py-3 flex items-center justify-center font-bold text-black uppercase bg-gray-100">
+                                <LoadingSpinner size="sm" color="black" />
+                                <span className="ml-2">Loading more...</span>
                             </li>
                         )}
                     </ul>
@@ -168,16 +168,16 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
             </div>
 
             {selectedPackages.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                     {selectedPackages.map((pkg) => (
                         <div
                             key={pkg.name}
-                            className="flex items-center bg-blue-50 text-blue-700 rounded-full px-3 sm:px-4 py-1 sm:py-2 shadow-sm hover:shadow-md transition-all duration-200 border border-blue-200"
+                            className="flex items-center bg-[#D8E2DC] text-black border-4 border-black px-4 py-2 shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all"
                         >
-                            <span className="text-sm sm:text-base font-medium">{pkg.name}</span>
+                            <span className="text-base font-black uppercase tracking-wider">{pkg.name}</span>
                             <button
                                 onClick={() => removePackage(pkg.name)}
-                                className="ml-2 text-blue-600 hover:text-blue-800 font-bold transition-colors duration-200"
+                                className="ml-3 bg-black text-white hover:bg-red-500 w-6 h-6 flex items-center justify-center font-black transition-colors"
                             >
                                 ×
                             </button>
@@ -187,4 +187,4 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
             )}
         </div>
     );
-} 
+}

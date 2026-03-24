@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
 
 interface LoadingSpinnerProps {
     size?: 'sm' | 'md' | 'lg';
-    color?: 'blue' | 'gray' | 'white';
+    color?: 'blue' | 'gray' | 'white' | 'black';
 }
 
 export default function LoadingSpinner({ size = 'md', color = 'blue' }: LoadingSpinnerProps) {
@@ -17,7 +16,8 @@ export default function LoadingSpinner({ size = 'md', color = 'blue' }: LoadingS
     const colorClasses = {
         blue: 'text-blue-600',
         gray: 'text-gray-600',
-        white: 'text-white'
+        white: 'text-white',
+        black: 'text-black'
     };
 
     return (

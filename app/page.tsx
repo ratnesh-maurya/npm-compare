@@ -1,86 +1,106 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import PackageInput from './components/PackageInput';
-import PackageComparison from './components/PackageComparison';
-import { Toaster } from 'react-hot-toast';
 import { PackageData } from './types';
+
+const PackageInput = dynamic(() => import('./components/PackageInput'), { ssr: false });
+const PackageComparison = dynamic(() => import('./components/PackageComparison'), { ssr: false });
+const Toaster = dynamic(() => import('react-hot-toast').then(mod => mod.Toaster), { ssr: false });
+
+type Ecosystem = 'npm' | 'go' | 'elixir';
 
 export default function Home() {
   const [packages, setPackages] = useState<PackageData[]>([]);
+  const [ecosystem, setEcosystem] = useState<Ecosystem>('npm');
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
-      {/* Enhanced Background Effects */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f0a_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f0a_1px,transparent_1px)] bg-[size:14px_24px] animate-[grid_20s_linear_infinite]" />
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 via-transparent to-transparent animate-gradient" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))] animate-pulse-slow" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(120,119,198,0.05),rgba(255,255,255,0))] animate-pulse-slower" />
-
-      <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="text-center mb-8 sm:mb-12 animate-fade-in-up">
-          <div className="inline-flex items-center space-x-2 p-2 px-4 mb-4 rounded-full bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 text-sm font-medium shadow-sm animate-fade-in-up [animation-delay:200ms]">
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-            <span>Compare npm packages with ease</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-600 to-gray-900 animate-fade-in-up [animation-delay:400ms]">
-            NPM Package Comparator
+    <main className="min-h-screen bg-[#FDF6E3] text-gray-900 border-x-8 border-black max-w-7xl mx-auto shadow-[16px_0_0_0_rgba(0,0,0,0.1),-16px_0_0_0_rgba(0,0,0,0.1)]">
+      <div className="border-b-8 border-black p-6 bg-[#FEFBF6]">
+        <div className="text-center animate-fade-in-up">
+          <h1 className="text-4xl sm:text-6xl font-black mb-4 uppercase tracking-tighter" style={{ textShadow: '4px 4px 0 #A1D0C9' }}>
+            Package Comparer
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-in-up [animation-delay:600ms]">
-            Compare npm packages side by side. Analyze versions, dependencies, downloads, and more...
+          <p className="text-xl font-bold uppercase tracking-widest border-2 border-black inline-block px-4 py-2 bg-yellow-100 shadow-[4px_4px_0_0_#000]">
+            Analyze ecosystem dependencies side by side
           </p>
         </div>
+      </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="relative z-10 animate-fade-in-up [animation-delay:800ms]">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition duration-1000 animate-pulse-slow"></div>
-            <div className="relative">
+      <div className="flex border-b-8 border-black divide-x-8 divide-black bg-[#E9E4DC] overflow-x-auto font-bold uppercase tracking-wider">
+        <button
+          onClick={() => setEcosystem('npm')}
+          className={`flex-1 py-4 px-6 text-center hover:bg-yellow-200 transition-colors ${ecosystem === 'npm' ? 'bg-yellow-300 shadow-[inset_0_-8px_0_0_#000]' : ''}`}
+        >
+          NPM (JS/TS)
+        </button>
+        <button
+          onClick={() => setEcosystem('go')}
+          className={`flex-1 py-4 px-6 text-center hover:bg-blue-200 transition-colors ${ecosystem === 'go' ? 'bg-blue-300 shadow-[inset_0_-8px_0_0_#000]' : ''}`}
+        >
+          Go (Golang)
+        </button>
+        <button
+          onClick={() => setEcosystem('elixir')}
+          className={`flex-1 py-4 px-6 text-center hover:bg-purple-200 transition-colors ${ecosystem === 'elixir' ? 'bg-purple-300 shadow-[inset_0_-8px_0_0_#000]' : ''}`}
+        >
+          Elixir (Hex)
+        </button>
+      </div>
+
+      <div className="p-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-12 border-4 border-black bg-white p-6 shadow-[8px_8px_0_0_#000]">
+            <h2 className="text-2xl font-bold mb-4 uppercase flex items-center gap-2">
+              <span className="w-4 h-4 bg-black inline-block"></span>
+              {ecosystem} Package Search
+            </h2>
+            {ecosystem === 'npm' ? (
               <PackageInput onPackagesChange={setPackages} />
-            </div>
+            ) : (
+              <div className="p-8 border-4 border-dashed border-gray-400 text-center font-bold text-gray-500 uppercase">
+                {ecosystem} Comparer is currently under development based on the new architecture plan.
+              </div>
+            )}
           </div>
 
-          {packages.length === 0 ? (
-            <div className="mt-12 sm:mt-16 text-center animate-fade-in-up [animation-delay:1000ms] relative z-0">
-              <div className="inline-block p-8 sm:p-10 rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group">
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-500"></div>
-                  <div className="relative text-5xl sm:text-7xl mb-4 transform hover:scale-110 transition-transform duration-300 animate-float">🔍</div>
-                </div>
-                <h2 className="text-xl sm:text-2xl font-semibold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-600 to-gray-900 animate-fade-in-up [animation-delay:1200ms]">
+          {packages.length === 0 && ecosystem === 'npm' ? (
+            <div className="mt-12 text-center">
+              <div className="inline-block p-12 border-8 border-black bg-[#D8E2DC] shadow-[12px_12px_0_0_#000] rotate-1 hover:rotate-0 transition-transform">
+                <div className="text-7xl mb-6">📊</div>
+                <h2 className="text-3xl font-black uppercase tracking-tight">
                   Start Comparing Packages
                 </h2>
-                <p className="text-sm sm:text-base text-gray-600 max-w-md mx-auto leading-relaxed animate-fade-in-up [animation-delay:1400ms]">
+                <p className="text-lg text-gray-800 max-w-md mx-auto leading-relaxed mt-4 font-bold">
                   Search for npm packages above to begin your comparison journey. Get detailed insights about package sizes, dependencies, and more.
                 </p>
-                <div className="mt-6 flex items-center justify-center space-x-2 text-sm text-gray-500 animate-fade-in-up [animation-delay:1600ms]">
-                  <span className="animate-bounce">●</span>
-                  <span className="animate-bounce delay-100">●</span>
-                  <span className="animate-bounce delay-200">●</span>
-                </div>
-                <div className="mt-6 text-xs text-gray-400 animate-fade-in-up [animation-delay:1800ms]">
+                <div className="mt-8 text-sm text-gray-600 font-bold bg-white border-2 border-black inline-block px-4 py-2 shadow-[4px_4px_0_0_#000]">
                   Try searching for popular packages like &quot;react&quot;, &quot;lodash&quot;, or &quot;axios&quot;
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="mt-6 sm:mt-8 animate-fade-in-up [animation-delay:1000ms]">
+          ) : ecosystem === 'npm' ? (
+            <div className="mt-8">
               <PackageComparison packages={packages} />
             </div>
-          )}
+          ) : null}
         </div>
       </div>
       <Toaster
         position="bottom-right"
         toastOptions={{
           style: {
-            background: 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+            background: '#fff',
+            border: '4px solid #000',
+            boxShadow: '4px 4px 0 0 #000',
+            fontWeight: 'bold',
+            borderRadius: '0',
+            textTransform: 'uppercase',
           },
           duration: 3000,
         }}
       />
+
 
       <style jsx global>{`
         @keyframes float {

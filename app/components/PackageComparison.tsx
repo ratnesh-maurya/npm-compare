@@ -1,10 +1,12 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { PackageData } from '../types';
-import SizeComparison from './comparison/SizeComparison';
-import VersionComparison from './comparison/VersionComparison';
-import DownloadsComparison from './comparison/DownloadsComparison';
+
+const SizeComparison = dynamic(() => import('./comparison/SizeComparison'), { ssr: false });
+const VersionComparison = dynamic(() => import('./comparison/VersionComparison'), { ssr: false });
+const DownloadsComparison = dynamic(() => import('./comparison/DownloadsComparison'), { ssr: false });
 
 interface PackageComparisonProps {
     packages: PackageData[];
@@ -25,19 +27,19 @@ export default function PackageComparison({ packages }: PackageComparisonProps) 
     };
 
     return (
-        <div className="mt-8 space-y-6">
-            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Package Comparison</h2>
+        <div className="mt-8 space-y-8">
+            <div className="bg-[#FEFBF6] border-4 border-black shadow-[8px_8px_0_0_#000] p-4 sm:p-6 md:p-8">
+                <h2 className="text-2xl sm:text-3xl font-black text-black uppercase tracking-wider mb-4 sm:mb-6 border-b-4 border-black pb-4">Package Comparison</h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
                     {packages.map((pkg) => (
-                        <div key={pkg.name} className="group bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] hover:border-gray-200">
-                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
+                        <div key={pkg.name} className="group bg-white p-4 sm:p-6 border-4 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all">
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                                 <div className="flex-1">
-                                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">{pkg.name}</h3>
-                                    <span className="text-sm text-gray-500">{pkg.author || 'Unknown'}</span>
+                                    <h3 className="text-xl sm:text-2xl font-black text-black uppercase group-hover:text-amber-600 transition-colors">{pkg.name}</h3>
+                                    <span className="text-sm font-bold text-gray-800 uppercase mt-2 block border-l-4 border-black pl-2">{pkg.author || 'Unknown'}</span>
                                 </div>
-                                <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium group-hover:bg-blue-100 transition-colors duration-200 self-start">
+                                <span className="px-3 py-1 bg-yellow-300 text-black border-2 border-black font-black uppercase shadow-[2px_2px_0_0_#000] self-start transform rotate-2">
                                     v{pkg.version}
                                 </span>
                             </div>
@@ -170,4 +172,4 @@ export default function PackageComparison({ packages }: PackageComparisonProps) 
             </div>
         </div>
     );
-} 
+}
