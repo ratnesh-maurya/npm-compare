@@ -121,13 +121,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-[#E9E4DC]`}>
+      <body className={`${inter.className} bg-slate-100`}>
         <Script
           id="seo-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <div className="fixed top-gradient h-4 w-full bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 z-50"></div>
         <GitHubLink />
         <main className="min-h-screen pt-8 pb-16">
           <div className="container mx-auto px-4 py-8">

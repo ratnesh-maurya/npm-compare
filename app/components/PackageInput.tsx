@@ -128,14 +128,14 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
     return (
         <div className="space-y-6">
             <div className="relative">
-                <div className="flex items-center border-4 border-black shadow-[4px_4px_0_0_#000] bg-white transition-all focus-within:translate-x-[2px] focus-within:translate-y-[2px] focus-within:shadow-[2px_2px_0_0_#000]">
-                    <MagnifyingGlassIcon className="h-5 w-5 sm:h-6 sm:w-6 text-black ml-4 font-bold" />
+                <div className="flex items-center rounded-xl border border-slate-300 bg-white shadow-sm transition-all focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20">
+                    <MagnifyingGlassIcon className="ml-4 h-5 w-5 text-slate-400" />
                     <input
                         type="text"
                         value={inputValue}
                         onChange={handleInputChange}
                         placeholder="Search for npm packages..."
-                        className="flex-1 py-3 sm:py-4 px-3 sm:px-4 focus:outline-none text-base sm:text-lg font-bold text-black placeholder-gray-500 bg-transparent uppercase"
+                        className="flex-1 bg-transparent px-3 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none"
                     />
                     {isLoading && (
                         <div className="pr-4">
@@ -145,20 +145,20 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
                 </div>
                 {suggestions.length > 0 && (
                     <ul
-                        className="absolute z-10 w-full mt-2 bg-white border-4 border-black shadow-[4px_4px_0_0_#000] max-h-96 overflow-y-auto"
+                        className="absolute z-10 mt-2 max-h-96 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl"
                         onScroll={handleScroll}
                     >
                         {suggestions.map((suggestion) => (
                             <li
                                 key={suggestion}
-                                className="px-4 py-3 hover:bg-yellow-200 cursor-pointer text-base font-bold text-black border-b-4 border-black last:border-b-0 uppercase transition-colors"
+                                className="cursor-pointer border-b border-slate-100 px-4 py-3 text-base text-slate-700 transition-colors last:border-b-0 hover:bg-blue-50"
                                 onClick={() => handlePackageSelect(suggestion)}
                             >
                                 {suggestion}
                             </li>
                         ))}
                         {isLoading && (
-                            <li className="px-4 py-3 flex items-center justify-center font-bold text-black uppercase bg-gray-100">
+                            <li className="flex items-center justify-center bg-slate-50 px-4 py-3 text-slate-600">
                                 <LoadingSpinner size="sm" color="black" />
                                 <span className="ml-2">Loading more...</span>
                             </li>
@@ -172,12 +172,12 @@ export default function PackageInput({ onPackagesChange }: PackageInputProps) {
                     {selectedPackages.map((pkg) => (
                         <div
                             key={pkg.name}
-                            className="flex items-center bg-[#D8E2DC] text-black border-4 border-black px-4 py-2 shadow-[4px_4px_0_0_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0_0_#000] transition-all"
+                            className="inline-flex items-center rounded-full border border-slate-300 bg-slate-50 px-3 py-1.5"
                         >
-                            <span className="text-base font-black uppercase tracking-wider">{pkg.name}</span>
+                            <span className="text-sm font-medium text-slate-700">{pkg.name}</span>
                             <button
                                 onClick={() => removePackage(pkg.name)}
-                                className="ml-3 bg-black text-white hover:bg-red-500 w-6 h-6 flex items-center justify-center font-black transition-colors"
+                                className="ml-2 rounded-full px-2 text-slate-500 transition-colors hover:text-red-600"
                             >
                                 ×
                             </button>

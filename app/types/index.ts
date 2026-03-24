@@ -1,4 +1,7 @@
+export type Ecosystem = 'npm' | 'go' | 'elixir';
+
 export interface PackageData {
+  ecosystem?: Ecosystem;
   name: string;
   version: string;
   description: string;

@@ -2,148 +2,142 @@
 
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { PackageData } from './types';
+import { Ecosystem, PackageData } from './types';
 
 const PackageInput = dynamic(() => import('./components/PackageInput'), { ssr: false });
 const PackageComparison = dynamic(() => import('./components/PackageComparison'), { ssr: false });
-const Toaster = dynamic(() => import('react-hot-toast').then(mod => mod.Toaster), { ssr: false });
-
-type Ecosystem = 'npm' | 'go' | 'elixir';
+const GoElixirTool = dynamic(() => import('./components/GoElixirTool'), { ssr: false });
+const GenericComparison = dynamic(() => import('./components/GenericComparison'), { ssr: false });
+const Toaster = dynamic(() => import('react-hot-toast').then((mod) => mod.Toaster), { ssr: false });
 
 export default function Home() {
-  const [packages, setPackages] = useState<PackageData[]>([]);
+  const [packagesByEcosystem, setPackagesByEcosystem] = useState<Record<Ecosystem, PackageData[]>>({
+    npm: [],
+    go: [],
+    elixir: [],
+  });
   const [ecosystem, setEcosystem] = useState<Ecosystem>('npm');
 
+  const packages = packagesByEcosystem[ecosystem];
+
+  const updatePackages = (nextPackages: PackageData[]) => {
+    setPackagesByEcosystem((prev) => ({
+      ...prev,
+      [ecosystem]: nextPackages,
+    }));
+  };
+
+  const labels: Record<Ecosystem, { title: string; subtitle: string }> = {
+    npm: {
+      title: 'NPM Package Analysis',
+      subtitle: 'Compare package size, versions, dependencies, and usage trends.',
+    },
+    go: {
+      title: 'Go Module Analysis',
+      subtitle: 'Inspect module versions, dependencies, and update timelines.',
+    },
+    elixir: {
+      title: 'Elixir Hex Analysis',
+      subtitle: 'Review Hex package metadata, dependencies, and downloads.',
+    },
+  };
+
   return (
-    <main className="min-h-screen bg-[#FDF6E3] text-gray-900 border-x-8 border-black max-w-7xl mx-auto shadow-[16px_0_0_0_rgba(0,0,0,0.1),-16px_0_0_0_rgba(0,0,0,0.1)]">
-      <div className="border-b-8 border-black p-6 bg-[#FEFBF6]">
-        <div className="text-center animate-fade-in-up">
-          <h1 className="text-4xl sm:text-6xl font-black mb-4 uppercase tracking-tighter" style={{ textShadow: '4px 4px 0 #A1D0C9' }}>
-            Package Comparer
-          </h1>
-          <p className="text-xl font-bold uppercase tracking-widest border-2 border-black inline-block px-4 py-2 bg-yellow-100 shadow-[4px_4px_0_0_#000]">
-            Analyze ecosystem dependencies side by side
+    <main className="mx-auto max-w-7xl space-y-6">
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
+        <div className="max-w-3xl">
+          <p className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold tracking-wide text-blue-700">
+            Multi-Ecosystem Comparator
+          </p>
+          <h1 className="mt-4 text-3xl font-bold text-slate-900 sm:text-5xl">Package Comparison Dashboard</h1>
+          <p className="mt-3 text-base text-slate-600 sm:text-lg">
+            Compare npm, Go modules, and Elixir Hex packages in one place with a consistent workflow.
           </p>
         </div>
-      </div>
 
-      <div className="flex border-b-8 border-black divide-x-8 divide-black bg-[#E9E4DC] overflow-x-auto font-bold uppercase tracking-wider">
-        <button
-          onClick={() => setEcosystem('npm')}
-          className={`flex-1 py-4 px-6 text-center hover:bg-yellow-200 transition-colors ${ecosystem === 'npm' ? 'bg-yellow-300 shadow-[inset_0_-8px_0_0_#000]' : ''}`}
-        >
-          NPM (JS/TS)
-        </button>
-        <button
-          onClick={() => setEcosystem('go')}
-          className={`flex-1 py-4 px-6 text-center hover:bg-blue-200 transition-colors ${ecosystem === 'go' ? 'bg-blue-300 shadow-[inset_0_-8px_0_0_#000]' : ''}`}
-        >
-          Go (Golang)
-        </button>
-        <button
-          onClick={() => setEcosystem('elixir')}
-          className={`flex-1 py-4 px-6 text-center hover:bg-purple-200 transition-colors ${ecosystem === 'elixir' ? 'bg-purple-300 shadow-[inset_0_-8px_0_0_#000]' : ''}`}
-        >
-          Elixir (Hex)
-        </button>
-      </div>
-
-      <div className="p-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-12 border-4 border-black bg-white p-6 shadow-[8px_8px_0_0_#000]">
-            <h2 className="text-2xl font-bold mb-4 uppercase flex items-center gap-2">
-              <span className="w-4 h-4 bg-black inline-block"></span>
-              {ecosystem} Package Search
-            </h2>
-            {ecosystem === 'npm' ? (
-              <PackageInput onPackagesChange={setPackages} />
-            ) : (
-              <div className="p-8 border-4 border-dashed border-gray-400 text-center font-bold text-gray-500 uppercase">
-                {ecosystem} Comparer is currently under development based on the new architecture plan.
-              </div>
-            )}
-          </div>
-
-          {packages.length === 0 && ecosystem === 'npm' ? (
-            <div className="mt-12 text-center">
-              <div className="inline-block p-12 border-8 border-black bg-[#D8E2DC] shadow-[12px_12px_0_0_#000] rotate-1 hover:rotate-0 transition-transform">
-                <div className="text-7xl mb-6">📊</div>
-                <h2 className="text-3xl font-black uppercase tracking-tight">
-                  Start Comparing Packages
-                </h2>
-                <p className="text-lg text-gray-800 max-w-md mx-auto leading-relaxed mt-4 font-bold">
-                  Search for npm packages above to begin your comparison journey. Get detailed insights about package sizes, dependencies, and more.
-                </p>
-                <div className="mt-8 text-sm text-gray-600 font-bold bg-white border-2 border-black inline-block px-4 py-2 shadow-[4px_4px_0_0_#000]">
-                  Try searching for popular packages like &quot;react&quot;, &quot;lodash&quot;, or &quot;axios&quot;
-                </div>
-              </div>
-            </div>
-          ) : ecosystem === 'npm' ? (
-            <div className="mt-8">
-              <PackageComparison packages={packages} />
-            </div>
-          ) : null}
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <button
+            onClick={() => setEcosystem('npm')}
+            className={`rounded-xl border px-4 py-3 text-sm font-semibold transition-colors ${ecosystem === 'npm'
+                ? 'border-blue-600 bg-blue-600 text-white'
+                : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
+              }`}
+          >
+            NPM (JS/TS)
+          </button>
+          <button
+            onClick={() => setEcosystem('go')}
+            className={`rounded-xl border px-4 py-3 text-sm font-semibold transition-colors ${ecosystem === 'go'
+                ? 'border-blue-600 bg-blue-600 text-white'
+                : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
+              }`}
+          >
+            Go (Golang)
+          </button>
+          <button
+            onClick={() => setEcosystem('elixir')}
+            className={`rounded-xl border px-4 py-3 text-sm font-semibold transition-colors ${ecosystem === 'elixir'
+                ? 'border-blue-600 bg-blue-600 text-white'
+                : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
+              }`}
+          >
+            Elixir (Hex)
+          </button>
         </div>
-      </div>
+      </section>
+
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <div>
+          <h2 className="text-2xl font-semibold text-slate-900">{labels[ecosystem].title}</h2>
+          <p className="mt-2 text-slate-600">{labels[ecosystem].subtitle}</p>
+        </div>
+
+        <div className="mt-6">
+          {ecosystem === 'npm' ? (
+            <PackageInput onPackagesChange={updatePackages} />
+          ) : (
+            <GoElixirTool
+              ecosystem={ecosystem}
+              packages={packages}
+              onPackagesChange={updatePackages}
+            />
+          )}
+        </div>
+
+        <div className="mt-8">
+          {ecosystem === 'npm' ? (
+            packages.length > 0 ? (
+              <PackageComparison packages={packages} />
+            ) : (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
+                <h3 className="text-xl font-semibold text-slate-800">Start comparing npm packages</h3>
+                <p className="mt-2 text-slate-600">
+                  Search and select packages above to view size, version, and download insights.
+                </p>
+              </div>
+            )
+          ) : (
+            <GenericComparison
+              packages={packages}
+              ecosystemLabel={ecosystem === 'go' ? 'Go module' : 'Hex'}
+            />
+          )}
+        </div>
+      </section>
+
       <Toaster
         position="bottom-right"
         toastOptions={{
           style: {
             background: '#fff',
-            border: '4px solid #000',
-            boxShadow: '4px 4px 0 0 #000',
-            fontWeight: 'bold',
-            borderRadius: '0',
-            textTransform: 'uppercase',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 8px 24px rgba(15, 23, 42, 0.08)',
+            fontWeight: '500',
+            borderRadius: '12px',
           },
           duration: 3000,
         }}
       />
-
-
-      <style jsx global>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        @keyframes grid {
-          0% { background-position: 0 0; }
-          100% { background-position: 14px 24px; }
-        }
-        @keyframes gradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        .animate-pulse-slow {
-          animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        .animate-pulse-slower {
-          animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        .animate-gradient {
-          animation: gradient 15s ease infinite;
-          background-size: 200% 200%;
-        }
-        .animate-fade-in-up {
-          animation: fadeInUp 0.5s ease-out forwards;
-          opacity: 0;
-        }
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </main>
   );
 }

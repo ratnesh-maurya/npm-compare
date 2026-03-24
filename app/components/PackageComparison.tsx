@@ -28,18 +28,18 @@ export default function PackageComparison({ packages }: PackageComparisonProps) 
 
     return (
         <div className="mt-8 space-y-8">
-            <div className="bg-[#FEFBF6] border-4 border-black shadow-[8px_8px_0_0_#000] p-4 sm:p-6 md:p-8">
-                <h2 className="text-2xl sm:text-3xl font-black text-black uppercase tracking-wider mb-4 sm:mb-6 border-b-4 border-black pb-4">Package Comparison</h2>
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 md:p-8">
+                <h2 className="mb-4 border-b border-slate-200 pb-4 text-2xl font-semibold text-slate-900 sm:mb-6 sm:text-3xl">Package Comparison</h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
                     {packages.map((pkg) => (
-                        <div key={pkg.name} className="group bg-white p-4 sm:p-6 border-4 border-black shadow-[4px_4px_0_0_#000] hover:shadow-[8px_8px_0_0_#000] hover:-translate-y-1 transition-all">
+                        <div key={pkg.name} className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md sm:p-6">
                             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                                 <div className="flex-1">
-                                    <h3 className="text-xl sm:text-2xl font-black text-black uppercase group-hover:text-amber-600 transition-colors">{pkg.name}</h3>
-                                    <span className="text-sm font-bold text-gray-800 uppercase mt-2 block border-l-4 border-black pl-2">{pkg.author || 'Unknown'}</span>
+                                    <h3 className="text-xl font-semibold text-slate-900 transition-colors group-hover:text-blue-600 sm:text-2xl">{pkg.name}</h3>
+                                    <span className="mt-2 block text-sm font-medium text-slate-600">{pkg.author || 'Unknown author'}</span>
                                 </div>
-                                <span className="px-3 py-1 bg-yellow-300 text-black border-2 border-black font-black uppercase shadow-[2px_2px_0_0_#000] self-start transform rotate-2">
+                                <span className="self-start rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
                                     v{pkg.version}
                                 </span>
                             </div>

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "clean": "node -e \"const fs=require('fs');fs.rmSync('.next',{recursive:true,force:true});console.log('Cleaned .next');\"",
+    "build": "npm run clean && next build --webpack",
     "start": "next start",
     "lint": "next lint"
   },
