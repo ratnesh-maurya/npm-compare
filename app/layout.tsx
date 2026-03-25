@@ -9,18 +9,25 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'NPM Compare Tool by Ratnesh Maurya',
-    template: '%s | NPM Compare Tool',
+    default: 'Package Compare Tool — npm, Go & Elixir | by Ratnesh Maurya',
+    template: '%s | Package Compare Tool',
   },
   description:
-    'Compare npm packages across size, download trends, versions, and metadata. Built by Ratnesh Maurya for faster package decisions.',
+    'Compare npm, Go module, and Elixir Hex packages side by side. Analyze bundle size, download trends, versions, dependencies, and metadata. Built by Ratnesh Maurya.',
   keywords: [
     'npm compare',
     'npm package comparison',
+    'go module comparison',
+    'golang package comparison',
+    'elixir hex comparison',
     'javascript package analyzer',
     'typescript package comparison',
     'package size checker',
     'npm downloads comparison',
+    'go module search',
+    'hex.pm package search',
+    'package dependency analyzer',
+    'multi-ecosystem package tool',
   ],
   authors: [{ name: 'Ratnesh Maurya', url: 'https://www.ratnesh-maurya.com' }],
   creator: 'Ratnesh Maurya',
@@ -41,24 +48,24 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://ratnesh-maurya.com/',
-    title: 'NPM Compare Tool by Ratnesh Maurya',
+    title: 'Package Compare Tool — npm, Go & Elixir | by Ratnesh Maurya',
     description:
-      'Compare npm packages side by side. Analyze versions, dependencies, size, and downloads.',
-    siteName: 'Ratnesh Maurya',
+      'Compare npm, Go module, and Elixir Hex packages side by side. Analyze size, versions, dependencies, and download trends.',
+    siteName: 'Package Compare — by Ratnesh Maurya',
     images: [
       {
         url: '/social.png',
         width: 1200,
         height: 630,
-        alt: 'NPM Package Comparator',
+        alt: 'Package Comparison Tool for npm, Go, and Elixir',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NPM Compare Tool by Ratnesh Maurya',
+    title: 'Package Compare Tool — npm, Go & Elixir',
     description:
-      'Compare npm packages side by side. Analyze versions, dependencies, size, and downloads.',
+      'Compare npm, Go module, and Elixir Hex packages side by side. Analyze size, versions, dependencies, and download trends.',
     creator: '@ratnesh_maurya',
     images: ['/social.png'],
   },
@@ -90,11 +97,11 @@ const jsonLd = {
       '@type': 'WebApplication',
       '@id': 'https://ratnesh-maurya.com/#app',
       url: 'https://ratnesh-maurya.com/',
-      name: 'NPM Compare Tool',
+      name: 'Package Compare Tool — npm, Go & Elixir',
       applicationCategory: 'DeveloperApplication',
       operatingSystem: 'Web',
       description:
-        'Compare npm packages across size, version metadata, and download trends to make faster dependency decisions.',
+        'Compare npm, Go module, and Elixir Hex packages side by side. Analyze bundle size, version metadata, dependencies, and download trends to make faster dependency decisions.',
       creator: {
         '@id': 'https://ratnesh-maurya.com/#person',
       },
